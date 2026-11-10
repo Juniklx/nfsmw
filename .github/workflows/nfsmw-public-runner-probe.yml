@@ -1,0 +1,27 @@
+name: NFSMW public runner smoke test
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runner-probe:
+    name: Minimal runner test (no secrets or downloads)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify runner started
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "NFSMW_PUBLIC_RUNNER_STARTED=TRUE"
+          echo "NFSMW_PUBLIC_CI_NO_GAME_FILES=TRUE"
+          echo "NFSMW_PUBLIC_CI_NO_SECRETS=TRUE"
+          echo "NFSMW_PUBLIC_CI_NO_CHECKOUT=TRUE"
+          echo "NFSMW_PUBLIC_CI_NO_APK=TRUE"
+          test "${RUNNER_OS}" = "Linux"
+          echo "NFSMW_PUBLIC_RUNNER_PROBE=PASS"
